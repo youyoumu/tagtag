@@ -1,0 +1,22 @@
+{
+  "name": "tagtag",
+  "version": "1.0.0",
+  "description": "taGtaG makes it easy to save and recall content you found on the internet with tagging system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/youyoumu/tagtag.git"
+  },
+  "author": "youyoumu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/youyoumu/tagtag/issues"
+  },
+  "homepage": "https://github.com/youyoumu/tagtag#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
