@@ -18,6 +18,7 @@
   "homepage": "https://github.com/youyoumu/tagtag#readme",
   "dependencies": {
     "@prisma/client": "^5.15.0",
+    "body-parser": "^1.20.2",
     "express": "^4.19.2"
   },
   "type": "module",
