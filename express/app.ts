@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 
+const jwtSecret = process.env.JWT_SECRET
 const prisma = new PrismaClient()
 const app: Express = express()
 const port = 3000
