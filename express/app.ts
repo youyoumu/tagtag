@@ -1,10 +1,12 @@
 import express, { Express, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
+import jwt from 'jsonwebtoken'
 
-const jwtSecret = process.env.JWT_SECRET
+const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
 const app: Express = express()
 const port = 3000
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -33,7 +35,9 @@ app.post('/users', async (req: Request, res: Response) => {
         password
       }
     })
-    return res.json({ user })
+    const id = user.id
+    const token = jwt.sign({ id }, jwtSecret)
+    return res.json({ user, token })
   } else {
     return res.status(400).json({ user, error })
   }
