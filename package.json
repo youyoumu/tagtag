@@ -19,7 +19,8 @@
   "dependencies": {
     "@prisma/client": "^5.15.0",
     "body-parser": "^1.20.2",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "tsx": "^4.15.5"
   },
   "type": "module",
   "devDependencies": {

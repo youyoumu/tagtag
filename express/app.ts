@@ -24,8 +24,8 @@ app.post('/users', async (req: Request, res: Response) => {
   const { username, password } = req.body.user
     ? req.body.user
     : { username: '', password: '' }
-  const user = await validateUserCreate(username, password)
-  if (user.error.length === 0) {
+  const { user, error } = await validateUserCreate(username, password)
+  if (error.length === 0) {
     const user = await prisma.user.create({
       data: {
         username,
@@ -34,7 +34,7 @@ app.post('/users', async (req: Request, res: Response) => {
     })
     return res.json({ user })
   } else {
-    return res.status(400).json({ user })
+    return res.status(400).json({ user, error })
   }
 })
 
@@ -46,26 +46,25 @@ async function validateUserCreate(username: string, password: string) {
   const error: string[] = []
   const user = {
     username,
-    password,
-    error
+    password
   }
 
-  if (username === '') {
+  if (user.username === '') {
     error.push('Username is required')
   }
-  if (password === '') {
+  if (user.password === '') {
     error.push('Password is required')
   }
-  if (username.length < 3) {
+  if (user.username.length < 3) {
     error.push('Username must be at least 3 characters')
   }
-  if (password.length < 3) {
+  if (user.password.length < 3) {
     error.push('Password must be at least 3 characters')
   }
 
   const userInDb = await prisma.user.findUnique({
     where: {
-      username: username
+      username: user.username
     }
   })
 
@@ -73,5 +72,5 @@ async function validateUserCreate(username: string, password: string) {
     error.push('Username already exists')
   }
 
-  return user
+  return { user, error }
 }
