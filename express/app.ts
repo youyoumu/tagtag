@@ -43,6 +43,24 @@ app.post('/users', async (req: Request, res: Response) => {
   }
 })
 
+app.post('/users/sign_in', async (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.sendStatus(400)
+  }
+
+  const { username, password } = req.body.user
+    ? req.body.user
+    : { username: '', password: '' }
+  const { user, error } = await validateUserSignIn(username, password)
+  if (error.length === 0) {
+    const id = user.id
+    const token = jwt.sign({ id }, jwtSecret)
+    return res.json({ user, token })
+  } else {
+    return res.status(401).json({ user, error })
+  }
+})
+
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
@@ -75,6 +93,39 @@ async function validateUserCreate(username: string, password: string) {
 
   if (userInDb) {
     error.push('Username already exists')
+  }
+
+  return { user, error }
+}
+
+async function validateUserSignIn(username: string, password: string) {
+  const error: string[] = []
+  const user = {
+    id: null,
+    username,
+    password
+  }
+  if (user.username === '') {
+    error.push('Username is required')
+  }
+  if (user.password === '') {
+    error.push('Password is required')
+  }
+
+  const userInDb = await prisma.user.findUnique({
+    where: {
+      username: user.username
+    }
+  })
+
+  if (!userInDb) {
+    error.push('Username not found')
+  } else {
+    if (userInDb.password !== user.password) {
+      error.push('Wrong password')
+    } else {
+      return { user: userInDb, error }
+    }
   }
 
   return { user, error }

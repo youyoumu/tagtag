@@ -1,0 +1,24 @@
+meta {
+  name: sign in
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/users/sign_in
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user":{
+      "username" : "alice2",
+      "password": "alice123"
+    }
+  }
+}
+
+body:multipart-form {
+  test: asdasd
+}
