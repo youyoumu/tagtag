@@ -2,9 +2,10 @@
   "name": "tagtag",
   "version": "1.0.0",
   "description": "taGtaG makes it easy to save and recall content you found on the internet with tagging system",
-  "main": "app.js",
+  "main": "express/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx tsx watch express/app.ts"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.2.0",
     "globals": "^15.4.0",
+    "nodemon": "^3.1.3",
     "prettier": "3.3.2",
     "prisma": "^5.15.0",
     "ts-node": "^10.9.2",
