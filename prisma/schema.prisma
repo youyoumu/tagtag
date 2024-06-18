@@ -11,8 +11,19 @@ datasource db {
 }
 
 model User {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  username   String    @unique
+  password   String
+  Content    Content[]
+}
+
+model Content {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
-  username   String   @unique
-  password   String
+  title      String   @default("")
+  body       String   @default("")
+  tags       String   @default("")
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
 }

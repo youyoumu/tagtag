@@ -1,0 +1,10 @@
+-- CreateTable
+CREATE TABLE "Content" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "title" TEXT NOT NULL DEFAULT '',
+    "body" TEXT NOT NULL DEFAULT '',
+    "tags" TEXT NOT NULL DEFAULT '',
+    "user_id" INTEGER NOT NULL,
+    CONSTRAINT "Content_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
