@@ -1,0 +1,22 @@
+meta {
+  name: create content
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/contents
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzE4Njk1NTQ4fQ.QJskKlbGAn20bdTJO39T4Ej36d6COQgv28XgP2cSxxQ",
+    "content": {
+      "title": "title test",
+      "body": "body test",
+      "tags": "test test2 test3"
+    }
+  }
+}

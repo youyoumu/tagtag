@@ -1,0 +1,17 @@
+meta {
+  name: content index
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:3000/contents
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzE4Njk1NTQ4fQ.QJskKlbGAn20bdTJO39T4Ej36d6COQgv28XgP2cSxxQ"
+  }
+}
