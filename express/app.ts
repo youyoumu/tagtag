@@ -151,6 +151,19 @@ app.post('/interactions', async (req: Request, res: Response) => {
   if (type === InteractionType.PING) {
     return res.send({ type: InteractionResponseType.PONG })
   }
+
+  if (type === InteractionType.APPLICATION_COMMAND) {
+    const { name } = data
+
+    if (name === 'test') {
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: 'test success'
+        }
+      })
+    }
+  }
 })
 
 app.listen(port, () => {
