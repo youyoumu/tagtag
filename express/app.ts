@@ -61,6 +61,68 @@ app.post('/users/sign_in', async (req: Request, res: Response) => {
   }
 })
 
+app.post('/contents', async (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.sendStatus(400)
+  }
+  const { token, content } = req.body
+
+  if (!token) {
+    return res.sendStatus(401)
+  }
+
+  if (!content) {
+    return res.sendStatus(422)
+  }
+
+  let id: number
+  try {
+    const decoded = jwt.verify(token, jwtSecret) as { id: number }
+    id = decoded.id
+    if (!id) {
+      return res.sendStatus(401)
+    }
+  } catch (error) {
+    return res.sendStatus(401)
+  }
+
+  const newContent = await prisma.content.create({
+    data: {
+      title: content.title || '',
+      body: content.body || '',
+      tags: content.tags || '',
+      user_id: id
+    }
+  })
+  res.send(newContent)
+})
+
+app.get('/contents', async (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.sendStatus(400)
+  }
+  const { token } = req.body
+  if (!token) {
+    return res.sendStatus(401)
+  }
+  let id: number
+  try {
+    const decoded = jwt.verify(token, jwtSecret) as { id: number }
+    id = decoded.id
+    if (!id) {
+      return res.sendStatus(401)
+    }
+  } catch (error) {
+    return res.sendStatus(401)
+  }
+  const contents = await prisma.content.findMany({
+    where: {
+      user_id: id
+    }
+  })
+  res.send(contents)
+})
+
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
