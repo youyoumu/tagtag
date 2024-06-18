@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
 const app: Express = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
