@@ -1,6 +1,14 @@
 import express, { Express, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
+import {
+  InteractionType,
+  InteractionResponseType,
+  InteractionResponseFlags,
+  MessageComponentTypes,
+  ButtonStyleTypes,
+  verifyKey
+} from 'discord-interactions'
 
 const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
@@ -121,6 +129,28 @@ app.get('/contents', async (req: Request, res: Response) => {
     }
   })
   res.send(contents)
+})
+
+app.post('/interactions', async (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.sendStatus(400)
+  }
+
+  const signature = req.get('X-Signature-Ed25519') as string
+  const timestamp = req.get('X-Signature-Timestamp') as string
+  const clientKey = process.env.PUBLIC_KEY || ''
+  const buf = Buffer.from(JSON.stringify(req.body))
+  const isValidRequest = await verifyKey(buf, signature, timestamp, clientKey)
+
+  if (!isValidRequest) {
+    return res.status(401).send('Bad request signature')
+  }
+
+  const { type, id, data } = req.body
+
+  if (type === InteractionType.PING) {
+    return res.send({ type: InteractionResponseType.PONG })
+  }
 })
 
 app.listen(port, () => {
