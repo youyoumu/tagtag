@@ -47,6 +47,25 @@ const SHARE_CONTENT_COMMAND = {
   ]
 }
 
-const ALL_COMMANDS = [TEST_COMMAND, SAVE_CONTENT_COMMAND, SHARE_CONTENT_COMMAND]
+const SEARCH_CONTENT_COMMAND = {
+  name: 'search',
+  type: 1,
+  description: 'search content with tags',
+  options: [
+    {
+      name: 'tags',
+      description: 'space seperated tags or title',
+      type: 3,
+      required: true
+    }
+  ]
+}
+
+const ALL_COMMANDS = [
+  TEST_COMMAND,
+  SAVE_CONTENT_COMMAND,
+  SHARE_CONTENT_COMMAND,
+  SEARCH_CONTENT_COMMAND
+]
 
 InstallGlobalCommands(process.env.APP_ID || '', ALL_COMMANDS)
