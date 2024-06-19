@@ -19,11 +19,12 @@ model User {
 }
 
 model Content {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  title      String   @default("")
-  body       String   @default("")
-  tags       String   @default("")
-  user       User     @relation(fields: [user_id], references: [id])
-  user_id    Int
+  id              Int      @id @default(autoincrement())
+  created_at      DateTime @default(now())
+  title           String   @default("")
+  body            String   @default("")
+  tags            String   @default("")
+  user            User     @relation(fields: [user_id], references: [id])
+  user_id         Int
+  discord_user_id String   @default("")
 }
