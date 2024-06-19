@@ -181,6 +181,21 @@ app.post('/interactions', async (req: Request, res: Response) => {
         }
       })
     }
+
+    if (name === 'share') {
+      const content = await prisma.content.findFirst({
+        where: {
+          title: data.options[0].value,
+          discord_user_id: req.body.member.user.id
+        }
+      })
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: JSON.stringify(content)
+        }
+      })
+    }
   }
 })
 
