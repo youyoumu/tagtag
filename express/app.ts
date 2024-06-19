@@ -196,6 +196,25 @@ app.post('/interactions', async (req: Request, res: Response) => {
         }
       })
     }
+
+    if (name === 'search') {
+      const tags: string = data.options[0].value
+      let tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
+
+      const contents = await prisma.content.findMany({
+        where: {
+          tags: {
+            contains: tags
+          }
+        }
+      })
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: JSON.stringify(contents)
+        }
+      })
+    }
   }
 })
 
