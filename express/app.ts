@@ -9,6 +9,7 @@ import {
   ButtonStyleTypes,
   verifyKey
 } from 'discord-interactions'
+import { json } from 'body-parser'
 
 const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
@@ -165,10 +166,18 @@ app.post('/interactions', async (req: Request, res: Response) => {
     }
 
     if (name === 'save') {
+      const content = await prisma.content.create({
+        data: {
+          title: data.options[0].value,
+          body: data.options[1].value,
+          tags: data.options[2].value,
+          discord_user_id: req.body.member.user.id
+        }
+      })
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'save success'
+          content: JSON.stringify(content)
         }
       })
     }
