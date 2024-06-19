@@ -25,6 +25,6 @@ model Content {
   body            String   @default("")
   tags            String   @default("")
   user            User     @relation(fields: [user_id], references: [id])
-  user_id         Int
+  user_id         Int      @default(0)
   discord_user_id String   @default("")
 }
