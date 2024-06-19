@@ -33,6 +33,20 @@ const SAVE_CONTENT_COMMAND = {
   ]
 }
 
-const ALL_COMMANDS = [TEST_COMMAND, SAVE_CONTENT_COMMAND]
+const SHARE_CONTENT_COMMAND = {
+  name: 'share',
+  type: 1,
+  description: 'share content with title',
+  options: [
+    {
+      name: 'title',
+      description: 'title of the content',
+      type: 3,
+      required: true
+    }
+  ]
+}
+
+const ALL_COMMANDS = [TEST_COMMAND, SAVE_CONTENT_COMMAND, SHARE_CONTENT_COMMAND]
 
 InstallGlobalCommands(process.env.APP_ID || '', ALL_COMMANDS)
