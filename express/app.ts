@@ -110,7 +110,7 @@ app.post('/users/connect', async (req: Request, res: Response) => {
       data: {
         user_id: id,
         external_account_id: externalAccountId,
-        external_account_platform: platform
+        platform: platform
       }
     })
     return res.send(externalAccount)
@@ -223,7 +223,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
           body: data.options[1].value,
           tags: tagsArray,
           external_account_id: req.body.member.user.id,
-          external_account_platform: 'Discord'
+          platform: 'Discord'
         }
       })
       return res.send({
@@ -239,7 +239,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
         where: {
           title: data.options[0].value,
           external_account_id: req.body.member.user.id,
-          external_account_platform: 'Discord'
+          platform: 'Discord'
         }
       })
       return res.send({
@@ -260,7 +260,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
             hasEvery: tagsArray
           },
           external_account_id: req.body.member.user.id,
-          external_account_platform: 'Discord'
+          platform: 'Discord'
         }
       })
       return res.send({
