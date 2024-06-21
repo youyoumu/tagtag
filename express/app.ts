@@ -9,7 +9,7 @@ import {
   ButtonStyleTypes,
   verifyKey
 } from 'discord-interactions'
-import { json } from 'body-parser'
+import { customAlphabet } from 'nanoid'
 
 const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
@@ -222,7 +222,9 @@ app.post('/interactions', async (req: Request, res: Response) => {
 
     if (name === 'connect') {
       const discord_user_id = req.body.member.user.id
-      const token = jwt.sign({ discord_user_id }, jwtSecret)
+      // const token = jwt.sign({ discord_user_id }, jwtSecret)
+      const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 8)
+      const token = nanoid()
 
       res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
