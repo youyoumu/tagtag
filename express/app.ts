@@ -95,11 +95,13 @@ app.post('/contents', async (req: Request, res: Response) => {
     return res.sendStatus(401)
   }
 
+  const tags: string = content.tags || ''
+  const tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
   const newContent = await prisma.content.create({
     data: {
       title: content.title || '',
       body: content.body || '',
-      tags: content.tags || '',
+      tags: tagsArray,
       user_id: id
     }
   })
@@ -166,11 +168,13 @@ app.post('/interactions', async (req: Request, res: Response) => {
     }
 
     if (name === 'save') {
+      const tags: string = data.options[2].value
+      const tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
       const content = await prisma.content.create({
         data: {
           title: data.options[0].value,
           body: data.options[1].value,
-          tags: data.options[2].value,
+          tags: tagsArray,
           discord_user_id: req.body.member.user.id
         }
       })
@@ -199,12 +203,12 @@ app.post('/interactions', async (req: Request, res: Response) => {
 
     if (name === 'search') {
       const tags: string = data.options[0].value
-      let tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
+      const tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
 
       const contents = await prisma.content.findMany({
         where: {
           tags: {
-            contains: tags
+            hasEvery: tagsArray
           }
         }
       })
