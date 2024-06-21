@@ -175,7 +175,8 @@ app.post('/interactions', async (req: Request, res: Response) => {
           title: data.options[0].value,
           body: data.options[1].value,
           tags: tagsArray,
-          discord_user_id: req.body.member.user.id
+          external_account_id: req.body.member.user.id,
+          external_account_platform: 'Discord'
         }
       })
       return res.send({
@@ -190,7 +191,8 @@ app.post('/interactions', async (req: Request, res: Response) => {
       const content = await prisma.content.findFirst({
         where: {
           title: data.options[0].value,
-          discord_user_id: req.body.member.user.id
+          external_account_id: req.body.member.user.id,
+          external_account_platform: 'Discord'
         }
       })
       return res.send({
@@ -209,7 +211,9 @@ app.post('/interactions', async (req: Request, res: Response) => {
         where: {
           tags: {
             hasEvery: tagsArray
-          }
+          },
+          external_account_id: req.body.member.user.id,
+          external_account_platform: 'Discord'
         }
       })
       return res.send({
