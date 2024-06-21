@@ -103,7 +103,17 @@ app.post('/users/connect', async (req: Request, res: Response) => {
   } else {
     const externalAccountAuthLast =
       externalAccountAuth[externalAccountAuth.length - 1]
-    return res.send(externalAccountAuthLast)
+    const externalAccountId = externalAccountAuthLast.external_account_id
+    const platform = externalAccountAuthLast.platform
+
+    const externalAccount = await prisma.externalAccount.create({
+      data: {
+        user_id: id,
+        external_account_id: externalAccountId,
+        external_account_platform: platform
+      }
+    })
+    return res.send(externalAccount)
   }
 })
 
