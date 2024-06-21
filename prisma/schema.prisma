@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  created_at DateTime  @default(now())
-  username   String    @unique
-  password   String
-  Content    Content[]
+  id              Int       @id @default(autoincrement())
+  created_at      DateTime  @default(now())
+  username        String    @unique
+  password        String
+  Content         Content[]
+  discord_user_id String[]  @default([])
 }
 
 model Content {
