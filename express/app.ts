@@ -106,6 +106,32 @@ app.post('/users/connect', async (req: Request, res: Response) => {
     const externalAccountId = externalAccountAuthLast.external_account_id
     const platform = externalAccountAuthLast.platform
 
+    const user = await prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        ExternalAccount: true
+      }
+    })
+
+    function isAlreadyConnected() {
+      let result = false
+      user?.ExternalAccount.forEach((externalAccount) => {
+        if (
+          externalAccount.external_account_id === externalAccountId &&
+          externalAccount.platform === platform
+        ) {
+          result = true
+        }
+      })
+      return result
+    }
+
+    if (isAlreadyConnected()) {
+      return res.send('already connected')
+    }
+
     const externalAccount = await prisma.externalAccount.create({
       data: {
         user_id: id,
