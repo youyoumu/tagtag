@@ -103,6 +103,14 @@ app.post('/users/connect', async (req: Request, res: Response) => {
   } else {
     const externalAccountAuthLast =
       externalAccountAuth[externalAccountAuth.length - 1]
+
+    const fifteenMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
+    const isWithinLast15Minutes =
+      externalAccountAuthLast.created_at > fifteenMinutesAgo
+    if (!isWithinLast15Minutes) {
+      return res.sendStatus(401)
+    }
+
     const externalAccountId = externalAccountAuthLast.external_account_id
     const platform = externalAccountAuthLast.platform
 
