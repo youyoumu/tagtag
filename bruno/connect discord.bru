@@ -1,0 +1,19 @@
+meta {
+  name: connect discord
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:3009/users/connect
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4OTg0ODc2fQ.gkh_-I49c2dKIHQ7HQSj1oWJ51kNDkzRjLqZiAK3KxQ",
+    "connection_token": "8aizcdsz",
+    "platform": "Discord"
+  }
+}

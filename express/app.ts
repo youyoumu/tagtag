@@ -70,6 +70,43 @@ app.post('/users/sign_in', async (req: Request, res: Response) => {
   }
 })
 
+app.post('/users/connect', async (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.sendStatus(400)
+  }
+  const { token, connection_token, platform } = req.body
+
+  if (!token || !connection_token || !platform) {
+    return res.sendStatus(401)
+  }
+
+  let id: number
+  try {
+    const decoded = jwt.verify(token, jwtSecret) as { id: number }
+    id = decoded.id
+    if (!id) {
+      return res.sendStatus(401)
+    }
+  } catch (error) {
+    return res.sendStatus(401)
+  }
+
+  const externalAccountAuth = await prisma.externalAccountAuth.findMany({
+    where: {
+      token: connection_token,
+      platform: platform
+    }
+  })
+
+  if (externalAccountAuth.length === 0) {
+    return res.sendStatus(401)
+  } else {
+    const externalAccountAuthLast =
+      externalAccountAuth[externalAccountAuth.length - 1]
+    return res.send(externalAccountAuthLast)
+  }
+})
+
 app.post('/contents', async (req: Request, res: Response) => {
   if (!req.body) {
     return res.sendStatus(400)
