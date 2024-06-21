@@ -14,7 +14,7 @@ CREATE TABLE "Content" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "title" TEXT NOT NULL DEFAULT '',
     "body" TEXT NOT NULL DEFAULT '',
-    "tags" TEXT NOT NULL DEFAULT '',
+    "tags" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "user_id" INTEGER,
     "discord_user_id" TEXT NOT NULL DEFAULT '',
 
