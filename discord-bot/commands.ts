@@ -61,11 +61,18 @@ const SEARCH_CONTENT_COMMAND = {
   ]
 }
 
+const CONNECT_COMMAND = {
+  name: 'connect',
+  description: 'connect your discord account to tagtag',
+  type: 1
+}
+
 const ALL_COMMANDS = [
   TEST_COMMAND,
   SAVE_CONTENT_COMMAND,
   SHARE_CONTENT_COMMAND,
-  SEARCH_CONTENT_COMMAND
+  SEARCH_CONTENT_COMMAND,
+  CONNECT_COMMAND
 ]
 
 InstallGlobalCommands(process.env.APP_ID || '', ALL_COMMANDS)
