@@ -219,6 +219,58 @@ app.post('/interactions', async (req: Request, res: Response) => {
         }
       })
     }
+
+    if (name === 'connect') {
+      const discord_user_id = req.body.member.user.id
+      const token = jwt.sign({ discord_user_id }, jwtSecret)
+
+      res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          flags: 64,
+          content: 'an instruction has been sent to your DM'
+        }
+      })
+
+      try {
+        const response = await fetch(
+          `https://discord.com/api/v10/users/@me/channels`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ recipient_id: discord_user_id })
+          }
+        )
+
+        if (!response.ok) {
+          console.error('Failed to create DM channel:', response.statusText)
+          throw new Error('Failed to create DM channel')
+        }
+
+        const dmChannel = await response.json()
+
+        await fetch(
+          `https://discord.com/api/v10/channels/${dmChannel.id}/messages`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              content: `Your connection token is: ${token}`
+            })
+          }
+        )
+      } catch (error) {
+        console.error('Error sending DM:', error)
+      }
+
+      return
+    }
   }
 })
 
