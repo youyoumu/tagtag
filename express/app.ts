@@ -226,6 +226,14 @@ app.post('/interactions', async (req: Request, res: Response) => {
       const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 8)
       const token = nanoid()
 
+      await prisma.externalAccountAuth.create({
+        data: {
+          token: token,
+          external_account_id: discord_user_id,
+          platform: 'Discord'
+        }
+      })
+
       res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
