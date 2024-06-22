@@ -285,9 +285,19 @@ app.post('/interactions', async (req: Request, res: Response) => {
     if (name === 'share') {
       const content = await prisma.content.findFirst({
         where: {
-          title: data.options[0].value,
-          external_account_id: userId,
-          platform: 'Discord'
+          OR: [
+            {
+              title: data.options[0].value,
+              external_account_id: userId,
+              platform: 'Discord'
+            },
+            {
+              title: data.options[0].value,
+              user_id: {
+                in: tagtagUser.map((user) => user.id)
+              }
+            }
+          ]
         }
       })
       return res.send({
@@ -304,11 +314,23 @@ app.post('/interactions', async (req: Request, res: Response) => {
 
       const contents = await prisma.content.findMany({
         where: {
-          tags: {
-            hasEvery: tagsArray
-          },
-          external_account_id: userId,
-          platform: 'Discord'
+          OR: [
+            {
+              tags: {
+                hasEvery: tagsArray
+              },
+              external_account_id: userId,
+              platform: 'Discord'
+            },
+            {
+              tags: {
+                hasEvery: tagsArray
+              },
+              user_id: {
+                in: tagtagUser.map((user) => user.id)
+              }
+            }
+          ]
         }
       })
       return res.send({
