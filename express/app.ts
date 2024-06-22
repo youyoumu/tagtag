@@ -219,6 +219,11 @@ app.post('/interactions', async (req: Request, res: Response) => {
   if (!req.body) {
     return res.sendStatus(400)
   }
+  console.log(req.body)
+  const userId = req.body.member?.user?.id
+    ? req.body.member.user.id
+    : req.body.user.id
+  console.log(userId)
 
   const signature = req.get('X-Signature-Ed25519') as string
   const timestamp = req.get('X-Signature-Timestamp') as string
@@ -256,7 +261,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
           title: data.options[0].value,
           body: data.options[1].value,
           tags: tagsArray,
-          external_account_id: req.body.member.user.id,
+          external_account_id: userId,
           platform: 'Discord'
         }
       })
@@ -272,7 +277,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
       const content = await prisma.content.findFirst({
         where: {
           title: data.options[0].value,
-          external_account_id: req.body.member.user.id,
+          external_account_id: userId,
           platform: 'Discord'
         }
       })
@@ -293,7 +298,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
           tags: {
             hasEvery: tagsArray
           },
-          external_account_id: req.body.member.user.id,
+          external_account_id: userId,
           platform: 'Discord'
         }
       })
@@ -306,7 +311,7 @@ app.post('/interactions', async (req: Request, res: Response) => {
     }
 
     if (name === 'connect') {
-      const discord_user_id = req.body.member.user.id
+      const discord_user_id = userId
       // const token = jwt.sign({ discord_user_id }, jwtSecret)
       const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 8)
       const token = nanoid()
