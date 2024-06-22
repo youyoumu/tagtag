@@ -219,11 +219,9 @@ app.post('/interactions', async (req: Request, res: Response) => {
   if (!req.body) {
     return res.sendStatus(400)
   }
-  console.log(req.body)
   const userId = req.body.member?.user?.id
     ? req.body.member.user.id
     : req.body.user.id
-  console.log(userId)
 
   const signature = req.get('X-Signature-Ed25519') as string
   const timestamp = req.get('X-Signature-Timestamp') as string
@@ -240,6 +238,17 @@ app.post('/interactions', async (req: Request, res: Response) => {
   if (type === InteractionType.PING) {
     return res.send({ type: InteractionResponseType.PONG })
   }
+
+  const tagtagUser = await prisma.user.findMany({
+    where: {
+      ExternalAccount: {
+        some: {
+          external_account_id: userId,
+          platform: 'Discord'
+        }
+      }
+    }
+  })
 
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data
