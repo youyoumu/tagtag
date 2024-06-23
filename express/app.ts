@@ -578,3 +578,18 @@ async function validateUserSignIn(username: string, password: string) {
 
   return { user, error }
 }
+
+function processStringWithTag(str: string) {
+  const match = str.match(/^(.+)#(\d+)$/)
+  if (match) {
+    return {
+      hasTag: true,
+      withoutTag: match[1]
+    }
+  } else {
+    return {
+      hasTag: false,
+      withoutTag: str
+    }
+  }
+}
