@@ -10,7 +10,9 @@ import {
   verifyKey
 } from 'discord-interactions'
 import { customAlphabet } from 'nanoid'
-import { title } from 'process'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
@@ -288,7 +290,12 @@ app.post('/interactions', async (req: Request, res: Response) => {
               fields: [
                 {
                   name: 'created at',
-                  value: content.created_at
+                  value:
+                    dayjs
+                      .utc(content.created_at)
+                      .format('YYYY-MM-DD HH:mm:ss') +
+                    ' ' +
+                    'UTC'
                 },
                 {
                   name: 'platform',
@@ -373,7 +380,12 @@ app.post('/interactions', async (req: Request, res: Response) => {
                 fields: [
                   {
                     name: 'created at',
-                    value: content.created_at
+                    value:
+                      dayjs
+                        .utc(content.created_at)
+                        .format('YYYY-MM-DD HH:mm:ss') +
+                      ' ' +
+                      'UTC'
                   },
                   {
                     name: 'platform',
