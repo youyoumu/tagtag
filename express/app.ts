@@ -278,7 +278,25 @@ app.post('/interactions', async (req: Request, res: Response) => {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: JSON.stringify(content)
+          embeds: [
+            {
+              title: content.title,
+              description: content.body,
+              footer: {
+                text: content.tags.join(', ')
+              },
+              fields: [
+                {
+                  name: 'created at',
+                  value: content.created_at
+                },
+                {
+                  name: 'platform',
+                  value: content.platform + ' - ' + content.external_account_id
+                }
+              ]
+            }
+          ]
         }
       })
     }
