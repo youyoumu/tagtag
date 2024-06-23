@@ -10,6 +10,7 @@ import {
   verifyKey
 } from 'discord-interactions'
 import { customAlphabet } from 'nanoid'
+import { title } from 'process'
 
 const jwtSecret = process.env.JWT_SECRET || 'secret'
 const prisma = new PrismaClient()
@@ -300,12 +301,26 @@ app.post('/interactions', async (req: Request, res: Response) => {
           ]
         }
       })
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: JSON.stringify(content)
-        }
-      })
+      if (content) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: content.body
+          }
+        })
+      } else {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            embeds: [
+              {
+                title: 'content not found'
+              }
+            ],
+            flags: InteractionResponseFlags.EPHEMERAL
+          }
+        })
+      }
     }
 
     if (name === 'search') {
