@@ -67,12 +67,27 @@ const CONNECT_COMMAND = {
   type: 1
 }
 
+const DETAILS_CONTENT_COMMAND = {
+  name: 'details',
+  type: 1,
+  description: 'see content details with title',
+  options: [
+    {
+      name: 'title',
+      description: 'title of the content',
+      type: 3,
+      required: true
+    }
+  ]
+}
+
 const ALL_COMMANDS = [
   TEST_COMMAND,
   SAVE_CONTENT_COMMAND,
   SHARE_CONTENT_COMMAND,
   SEARCH_CONTENT_COMMAND,
-  CONNECT_COMMAND
+  CONNECT_COMMAND,
+  DETAILS_CONTENT_COMMAND
 ]
 
 InstallGlobalCommands(process.env.APP_ID || '', ALL_COMMANDS)
