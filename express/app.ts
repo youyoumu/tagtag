@@ -268,9 +268,62 @@ app.post('/interactions', async (req: Request, res: Response) => {
     if (name === 'save') {
       const tags: string = data.options[2].value
       const tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
+      let title = data.options[0].value
+
+      const contentWithSameTitle = await prisma.content.findMany({
+        where: {
+          OR: [
+            {
+              title: title,
+              external_account_id: userId,
+              platform: 'Discord'
+            },
+            {
+              title: title,
+              user_id: {
+                in: tagtagUser.map((user) => user.id)
+              }
+            }
+          ]
+        }
+      })
+
+      if (contentWithSameTitle.length !== 0) {
+        const titleWithoutTag = processStringWithTag(title).withoutTag
+        const contentWithSimilarTitle = await prisma.content.findMany({
+          where: {
+            OR: [
+              {
+                title: {
+                  startsWith: titleWithoutTag
+                },
+                external_account_id: userId,
+                platform: 'Discord'
+              },
+              {
+                title: titleWithoutTag,
+                user_id: {
+                  in: tagtagUser.map((user) => user.id)
+                }
+              }
+            ]
+          }
+        })
+
+        const similarTitle = contentWithSimilarTitle.map(
+          (content) => content.title
+        )
+
+        let tag = 2
+        while (similarTitle.includes(title)) {
+          title = titleWithoutTag + '#' + tag
+          tag++
+        }
+      }
+
       const content = await prisma.content.create({
         data: {
-          title: data.options[0].value,
+          title: title,
           body: data.options[1].value,
           tags: tagsArray,
           external_account_id: userId,
