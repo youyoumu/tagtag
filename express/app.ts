@@ -323,6 +323,65 @@ app.post('/interactions', async (req: Request, res: Response) => {
       }
     }
 
+    if (name === 'details') {
+      const content = await prisma.content.findFirst({
+        where: {
+          OR: [
+            {
+              title: data.options[0].value,
+              external_account_id: userId,
+              platform: 'Discord'
+            },
+            {
+              title: data.options[0].value,
+              user_id: {
+                in: tagtagUser.map((user) => user.id)
+              }
+            }
+          ]
+        }
+      })
+      if (content) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            embeds: [
+              {
+                title: content.title,
+                description: content.body,
+                footer: {
+                  text: content.tags.join(', ')
+                },
+                fields: [
+                  {
+                    name: 'created at',
+                    value: content.created_at
+                  },
+                  {
+                    name: 'platform',
+                    value:
+                      content.platform + ' - ' + content.external_account_id
+                  }
+                ]
+              }
+            ]
+          }
+        })
+      } else {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            embeds: [
+              {
+                title: 'content not found'
+              }
+            ],
+            flags: InteractionResponseFlags.EPHEMERAL
+          }
+        })
+      }
+    }
+
     if (name === 'search') {
       const tags: string = data.options[0].value
       const tagsArray: string[] = tags.split(' ').filter((x) => x !== '')
