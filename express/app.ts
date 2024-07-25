@@ -107,10 +107,10 @@ app.post('/users/connect', async (req: Request, res: Response) => {
     const externalAccountAuthLast =
       externalAccountAuth[externalAccountAuth.length - 1]
 
-    const fifteenMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
-    const isWithinLast15Minutes =
-      externalAccountAuthLast.created_at > fifteenMinutesAgo
-    if (!isWithinLast15Minutes) {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
+    const isWithinLast5Minutes =
+      externalAccountAuthLast.created_at > fiveMinutesAgo
+    if (!isWithinLast5Minutes) {
       return res.sendStatus(401)
     }
 
